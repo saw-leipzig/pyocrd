@@ -16,7 +16,7 @@ help:
 	@echo "    deps-pip       Install python deps via pip"
 	@echo "    deps-pip-test  Install test python deps via pip"
 	@echo "    install        (Re)install the tool"
-	@echo "    repo/assets    Clone OCR-D/ocrd-assets to ./repo/assets"
+	@echo "    repo/assets    Clone OCR-D/assets to ./repo/assets"
 	@echo "    repo/spec      Clone OCR-D/spec to ./repo/spec"
 	@echo "    spec           Copy JSON Schema, OpenAPI from OCR-D/spec"
 	@echo "    assets         Setup test assets"
@@ -56,14 +56,23 @@ deps-pip-test:
 install: spec
 	$(PIP) install .
 
+# Regenerate python code from PAGE XSD
+generate-page: repo/assets
+	generateDS \
+		-f \
+		--no-namespace-defs \
+		--root-element='PcGts' \
+		-o ocrd/model/ocrd_page_generateds.py \
+		repo/assets/data/schema/2018.xsd
+
 #
 # Repos
 #
 
-# Clone OCR-D/ocrd-assets to ./repo/assets
+# Clone OCR-D/assets to ./repo/assets
 repo/assets:
 	mkdir -p $(dir $@)
-	git clone https://github.com/OCR-D/ocrd-assets "$@"
+	git clone https://github.com/OCR-D/assets "$@"
 
 # Clone OCR-D/spec to ./repo/spec
 repo/spec:
@@ -145,3 +154,12 @@ test-profile:
 # Build docker image
 docker:
 	docker build -t $(DOCKER_TAG) .
+
+#
+# bash library
+#
+.PHONY: bashlib
+
+# Build bash library
+bashlib:
+	cd bashlib; make lib

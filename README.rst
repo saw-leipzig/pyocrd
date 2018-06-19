@@ -1,14 +1,14 @@
-pyocrd
-======
+core
+====
 
 
     Collection of OCR-related python tools and wrappers from the OCR-D team
 
-.. image:: https://travis-ci.org/OCR-D/pyocrd.svg?branch=master
-    :target: https://travis-ci.org/OCR-D/pyocrd
+.. image:: https://travis-ci.org/OCR-D/core.svg?branch=master
+    :target: https://travis-ci.org/OCR-D/core
 
 .. image:: https://img.shields.io/docker/automated/ocrd/pyocrd.svg
-    :target: https://hub.docker.com/r/ocrd/pyocrd/tags/
+    :target: https://hub.docker.com/r/ocrd/core/tags/
     :alt: Docker Automated build
 
 .. image:: https://img.shields.io/pypi/v/ocrd.svg
@@ -68,7 +68,7 @@ Examples:
 Testing
 -------
 
-Download ocrd-assets (``make assets``)
+Download assets (``make assets``)
 
 Test with local files: ``make test``
 
@@ -77,7 +77,7 @@ Test with local asset server:
   - ``make test OCRD_BASEURL='http://localhost:5001/'``
 
 Test with remote assets:
-  - ``make test OCRD_BASEURL='https://github.com/OCR-D/ocrd-assets/raw/master/data/'``
+  - ``make test OCRD_BASEURL='https://github.com/OCR-D/assets/raw/master/data/'``
 
 See Also
 --------

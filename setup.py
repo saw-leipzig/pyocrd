@@ -8,7 +8,7 @@ with codecs.open('README.rst', encoding='utf-8') as f:
 
 setup(
     name='ocrd',
-    version='0.0.7',
+    version='0.3.1',
     description='OCR-D framework',
     long_description=README,
     author='Kay-Michael Würzner, Konstantin Baierer',
@@ -30,11 +30,11 @@ setup(
         'requests',
     ],
     package_data={
-        '': ['*.json', '*.yml', '*.yaml'],
+        '': ['*.json', '*.yml', '*.yaml', '*.bash', '*.xml'],
     },
     entry_points={
         'console_scripts': [
-            'ocrd=ocrd.cli.run:cli',
+            'ocrd=ocrd.cli:cli',
         ]
     },
 )
