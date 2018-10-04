@@ -8,7 +8,7 @@ with codecs.open('README.rst', encoding='utf-8') as f:
 
 setup(
     name='ocrd',
-    version='0.3.1',
+    version='0.8.5',
     description='OCR-D framework',
     long_description=README,
     author='Kay-Michael Würzner, Konstantin Baierer',
@@ -24,10 +24,10 @@ setup(
         'jsonschema',
         'lxml',
         'numpy',
-        'ocrd-pyexiftool',
         'opencv-python',
         'pyyaml',
         'requests',
+        'Deprecated == 1.2.0',
     ],
     package_data={
         '': ['*.json', '*.yml', '*.yaml', '*.bash', '*.xml'],

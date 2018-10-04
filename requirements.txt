@@ -1,6 +1,5 @@
 click
 requests
-ocrd-pyexiftool
 lxml
 Pillow
 numpy
@@ -8,3 +7,4 @@ opencv-python
 Flask
 jsonschema
 pyyaml
+Deprecated == 1.2.0

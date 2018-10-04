@@ -12,18 +12,23 @@ polygon is what opencv2 expects
 
 xywh is what tesserocr expects/produces.
 """
-import subprocess
-import logging
+
+__all__ = [
+    'logging',
+    'getLogger',
+    'points_from_xywh',
+    'xywh_from_points',
+    'polygon_from_points',
+    'is_string',
+    'concat_padded',
+    'safe_filename'
+]
+
 import re
 import sys
 
-logging.basicConfig(level=logging.DEBUG)
-#  logging.getLogger('ocrd.resolver').setLevel(logging.INFO)
-logging.getLogger('ocrd.resolver.download_to_directory').setLevel(logging.INFO)
-logging.getLogger('ocrd.resolver.add_files_to_mets').setLevel(logging.INFO)
-
-def getLogger(*args, **kwargs):
-    return logging.getLogger(*args, **kwargs)
+import logging
+from ocrd.logging import getLogger
 
 def points_from_xywh(box):
     """
@@ -54,12 +59,26 @@ def xywh_from_points(points):
     """
     Constructs an dict representing a rectangle with keys x, y, w, h
     """
-    [tl, tr, br] = [[int(p) for p in pair.split(',')] for pair in points.split(' ')[:3]]
+    xys = [[int(p) for p in pair.split(',')] for pair in points.split(' ')]
+    minx = sys.maxsize
+    miny = sys.maxsize
+    maxx = 0
+    maxy = 0
+    for xy in xys:
+        if xy[0] < minx:
+            minx = xy[0]
+        if xy[0] > maxx:
+            maxx = xy[0]
+        if xy[1] < miny:
+            miny = xy[1]
+        if xy[1] > maxy:
+            maxy = xy[1]
+
     return {
-        'x': tl[0],
-        'y': tl[1],
-        'w': tr[0] - tl[0],
-        'h': br[1] - tr[1],
+        'x': minx,
+        'y': miny,
+        'w': maxx - minx,
+        'h': maxy - miny,
     }
 
 def polygon_from_points(points):
@@ -72,17 +91,14 @@ def polygon_from_points(points):
         polygon.append([float(x_y[0]), float(x_y[1])])
     return polygon
 
-# https://stackoverflow.com/a/10133365/201318
 def xmllint_format(xml):
-    proc = subprocess.Popen(
-        ['xmllint', '--format', '/dev/stdin'],
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-    )
-    output, _ = proc.communicate(xml)
-    return output
+    from lxml import etree as ET
+    parser = ET.XMLParser(resolve_entities=False, strip_cdata=False, remove_blank_text=True)
+    document = ET.fromstring(xml, parser)
+    return ('%s\n%s' % ('<?xml version="1.0" encoding="UTF-8"?>', ET.tostring(document, pretty_print=True).decode('utf-8'))).encode('utf-8')
 
 def is_string(val):
+    # pylint: disable=undefined-variable
     return isinstance(val, (str, unicode)) if sys.version_info < (3, 0) else isinstance(val, str)
 
 def concat_padded(base, *args):

@@ -1,5 +1,7 @@
+import os
 import json
 import subprocess
+from deprecated.sphinx import deprecated
 from ocrd.utils import getLogger
 from ocrd.validator import ParameterValidator
 
@@ -40,7 +42,10 @@ def run_processor(
         working_dir
     )
     if parameter is not None:
-        fname = workspace.download_url(parameter)
+        if not '://' in parameter:
+            fname = os.path.abspath(parameter)
+        else:
+            fname = workspace.download_url(parameter)
         with open(fname, 'r') as param_json_file:
             parameter = json.load(param_json_file)
     else:
@@ -58,6 +63,7 @@ def run_processor(
     processor.process()
     workspace.save_mets()
 
+# TODO not used as of 0.8.2
 def run_cli(
         binary,
         mets_url=None,
@@ -130,8 +136,11 @@ class Processor(object):
         """
         return self.workspace.mets.find_files(fileGrp=self.input_file_grp, groupId=self.group_id)
 
+    @deprecated(version='0.8.0', reason="Use self.workspace.add_file directly. See https://github.com/OCR-D/core/issues/166.")
     def add_output_file(self, basename=None, file_grp=None, ID=None, **kwargs):
         """
+        DEPRECATED
+
         Add an output file.
 
         Args:

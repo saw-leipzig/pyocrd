@@ -4,15 +4,27 @@ core
 
     Collection of OCR-related python tools and wrappers from the OCR-D team
 
+.. image:: https://img.shields.io/pypi/v/ocrd.svg
+    :target: https://pypi.org/project/ocrd/
+
 .. image:: https://travis-ci.org/OCR-D/core.svg?branch=master
     :target: https://travis-ci.org/OCR-D/core
+
+.. image:: https://circleci.com/gh/OCR-D/core.svg?style=svg
+    :target: https://circleci.com/gh/OCR-D/core
+
+.. image:: https://scrutinizer-ci.com/g/OCR-D/core/badges/build.png?b=master
+    :target: https://scrutinizer-ci.com/g/OCR-D/core
 
 .. image:: https://img.shields.io/docker/automated/ocrd/pyocrd.svg
     :target: https://hub.docker.com/r/ocrd/core/tags/
     :alt: Docker Automated build
 
-.. image:: https://img.shields.io/pypi/v/ocrd.svg
-    :target: https://pypi.org/project/ocrd/
+.. image:: https://codecov.io/gh/OCR-D/core/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/OCR-D/core
+
+.. image:: https://scrutinizer-ci.com/g/OCR-D/core/badges/quality-score.png?b=master
+    :target: https://scrutinizer-ci.com/g/OCR-D/core
 
 Installation
 ------------
@@ -21,14 +33,12 @@ To bootstrap the tool, you'll need installed (Ubuntu packages):
 
 * Python (``python``)
 * pip (``python-pip``)
-* exiftool (``libimage-exiftool-perl``)
-* libxml2-utils for xmllint (``libxml2-utils``)
 
 To install system-wide:
 
 ::
 
-    make deps-ubuntu deps-pip install
+    make deps-ubuntu deps install
 
 
 To develop, install to a virtualenv
@@ -38,7 +48,7 @@ To develop, install to a virtualenv
     pip install virtualenv
     virtualenv --no-site-packages venv
     source venv/bin/activate
-    make deps-pip install
+    make deps install
 
 Usage
 -----

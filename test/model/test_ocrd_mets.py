@@ -1,6 +1,6 @@
 from test.base import TestCase, main, assets
 
-from ocrd.constants import MIMETYPE_PAGE, METS_XML_EMPTY
+from ocrd.constants import MIMETYPE_PAGE, VERSION
 from ocrd.model import OcrdMets
 
 class TestOcrdMets(TestCase):
@@ -14,10 +14,13 @@ class TestOcrdMets(TestCase):
         self.assertEqual(self.mets.unique_identifier, 'foo', 'Right identifier after change')
 
     def test_unique_identifier_from_nothing(self):
-        self.mets = OcrdMets(content=METS_XML_EMPTY)
-        self.assertEqual(self.mets.unique_identifier, None, 'no identifier')
-        self.mets.unique_identifier = 'foo'
-        self.assertEqual(self.mets.unique_identifier, 'foo', 'Right identifier after change')
+        mets = OcrdMets.empty_mets()
+        self.assertEqual(mets.unique_identifier, None, 'no identifier')
+        mets.unique_identifier = 'foo'
+        self.assertEqual(mets.unique_identifier, 'foo', 'Right identifier after change')
+        as_string = mets.to_xml().decode('utf-8')
+        self.assertIn('ocrd/core v%s' % VERSION, as_string)
+        self.assertIn('CREATEDATE="2018-', as_string)
 
     def test_file_groups(self):
         self.assertEqual(len(self.mets.file_groups), 17, '17 file groups')
@@ -47,12 +50,17 @@ class TestOcrdMets(TestCase):
         self.assertEqual(f.groupId, None, 'No GROUPID')
 
     def test_add_file_ID_fail(self):
-        f = self.mets.add_file('OUTPUT', ID='best-id-ever')
+        f = self.mets.add_file('OUTPUT', ID='best-id-ever', mimetype="beep/boop")
         self.assertEqual(f.ID, 'best-id-ever', "ID kept")
         with self.assertRaises(Exception) as cm:
-            self.mets.add_file('OUTPUT', ID='best-id-ever')
-        self.assertEquals(str(cm.exception), "File with ID='best-id-ever' already exists")
+            self.mets.add_file('OUTPUT', ID='best-id-ever', mimetype="boop/beep")
+        self.assertEqual(str(cm.exception), "File with ID='best-id-ever' already exists")
+        f2 = self.mets.add_file('OUTPUT', ID='best-id-ever', mimetype="boop/beep", force=True)
+        self.assertEqual(f._el, f2._el)
 
+    def test_filegrp_from_file(self):
+        f = self.mets.find_files(fileGrp='OCR-D-IMG')[0]
+        self.assertEqual(f.fileGrp, 'OCR-D-IMG')
 
     def test_file_groupid(self):
         f = self.mets.find_files()[0]

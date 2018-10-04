@@ -1,7 +1,7 @@
 import yaml
 from pkg_resources import resource_string, resource_filename
 
-VERSION = '0.3.1'
+VERSION = '0.8.5'
 
 TMP_PREFIX = 'pyocrd-'
 
@@ -17,8 +17,6 @@ MIMETYPE_PAGE = 'application/vnd.prima.page+xml'
 
 DEFAULT_UPLOAD_FOLDER = '/tmp/uploads-pyocrd'
 DEFAULT_REPOSITORY_URL = 'http://localhost:5000/'
-
-DEFAULT_CACHE_FOLDER = '/tmp/cache-pyocrd'
 
 FILE_GROUP_PREFIX = 'OCR-D-'
 FILE_GROUP_CATEGORIES = ['IMG', 'SEG', 'OCR', 'COR', 'GT']
